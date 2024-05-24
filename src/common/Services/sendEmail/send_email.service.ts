@@ -25,9 +25,6 @@ export class SendEmailService {
                 pass: process.env.PASSWORD_GMAIL,
             },
         });
-        
-        console.log(transporter.auth);
-        
 
 
         const token = this.jwtService.sign({ email },
@@ -37,9 +34,9 @@ export class SendEmailService {
 
         let test = verifyEmailTemplate(token)
         if (type == 'forgetPassword') test = ChangePassTemplate(token)
-
+            
         // send mail with defined transport object
-        const info = await transporter.sendMail({
+        await transporter.sendMail({
             from: `"3alamny App" <${process.env.USER_GMAIL}>`, // sender address
             to: email, // list of receivers
             subject: "can you verify email now", // Subject line

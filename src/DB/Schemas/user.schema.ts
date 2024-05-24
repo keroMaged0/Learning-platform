@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import mongoose from "mongoose";
 
 
 @Schema()
@@ -24,9 +25,9 @@ export class User {
     password: string;
 
     @Prop({
-        
+
     })
-    phoneNumber: number;
+    phoneNumber: string;
 
     @Prop({
         min: [10, 'Age must be greater than 10'],
@@ -46,6 +47,7 @@ export class User {
     })
     isDeleted: boolean;
 
+
     @Prop({
         default: false,
     })
@@ -60,7 +62,13 @@ export class User {
     @Prop({
         default: false,
     })
-    passwordUpdated: boolean;
+    changePassword: boolean;
+
+    @Prop({
+        type: Date,
+        default: 1 / 12 / 1999,
+    })
+    changePasswordTime: Date;
 
     @Prop({
         default: false,

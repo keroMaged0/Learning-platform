@@ -32,9 +32,11 @@ export class SendEmailService {
         )
         if (!token) throw new HttpException('fail token', 404)
 
+
+
         let test = verifyEmailTemplate(token)
         if (type == 'forgetPassword') test = ChangePassTemplate(token)
-            
+
         // send mail with defined transport object
         await transporter.sendMail({
             from: `"3alamny App" <${process.env.USER_GMAIL}>`, // sender address
@@ -43,6 +45,7 @@ export class SendEmailService {
             html: test, // html body
         });
 
+        return true;
     }
 
 }

@@ -1,4 +1,8 @@
-import { Body, Controller, Delete, Get, Header, Headers, Param, Patch, Post, Put, Req, Res, UseGuards } from "@nestjs/common";
+import {
+    Body, Controller,
+    Delete, Get, Param, Patch,
+    Post, Put, Req, Res, UseGuards
+} from "@nestjs/common";
 
 import { Request, Response } from "express";
 
@@ -52,7 +56,7 @@ export class UserController {
         res.status(200).json({ message: 'Updated SuccessFully', data: user })
     }
 
-    //========================= Update User Password Controller =========================//
+    //========================= Update User Email Controller =========================//
     @Patch('Update/Email')
     async updateUserEmailController(
         @Res() res: Response,

@@ -104,10 +104,10 @@ export class UserService {
         if (uniqueEmail) throw new HttpException('Email already exists', 400)
 
         // verify email
-        await this.sendEmailService.sendEmail(newEmail, 'verify Email')
+        const sendEmail = await this.sendEmailService.sendEmail(newEmail, 'verify Email')
+        if (!sendEmail) throw new HttpException('invalid data', 400)
 
-
-        user.verifyEmail = false
+            user.verifyEmail = false
         user.email = newEmail
 
         await user.save()
@@ -230,7 +230,7 @@ export class UserService {
         if (newPassword !== confirmPassword) throw new HttpException('password and confirmPassword not match', 400)
 
         // update password
-        user.password =  bcrypt.hashSync(newPassword, +process.env.SALT_AROUND)
+        user.password = bcrypt.hashSync(newPassword, +process.env.SALT_AROUND)
         user.changePassword = true
         user.changePasswordTime = new Date()
 

@@ -1,13 +1,16 @@
+import { SendEmailService } from './common/Services/sendEmail/send_email.service';
+// import { HttpExceptionFilter } from './common/Filters/all-exceptions.filter';
+import { AuthModule, SendEmailModule, UserModel } from './Modules';
+import { AuthController } from './Modules/Auth/auth.controller';
+import { AuthService } from './Modules/Auth/auth.service';
+import { Model } from './DB/models-generation';
+
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+// import { APP_FILTER } from '@nestjs/core';
+import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 
-import { Model } from './DB/models-generation';
-import { AuthModule, SendEmailModule ,UserModel} from './Modules';
-import { SendEmailService } from './common/Services/sendEmail/send_email.service';
-import { AuthService } from './Modules/Auth/auth.service';
-import { JwtService } from '@nestjs/jwt';
-import { AuthController } from './Modules/Auth/auth.controller';
 
 
 @Module({
@@ -18,6 +21,7 @@ import { AuthController } from './Modules/Auth/auth.controller';
     UserModel,
     SendEmailModule,
 
+
     ConfigModule.forRoot({
       envFilePath: 'src/config/.env',
       isGlobal: true,
@@ -27,6 +31,10 @@ import { AuthController } from './Modules/Auth/auth.controller';
     AuthController
   ],
   providers: [
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: HttpExceptionFilter,
+    // },
     AuthService,
     JwtService,
     SendEmailService
@@ -34,5 +42,5 @@ import { AuthController } from './Modules/Auth/auth.controller';
 })
 export class AppModule {
 
-  
+
 }

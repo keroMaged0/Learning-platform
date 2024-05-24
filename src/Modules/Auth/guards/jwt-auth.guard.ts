@@ -1,4 +1,3 @@
-import { decode } from 'punycode';
 import { CanActivate, ExecutionContext, HttpException, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from '@nestjs/mongoose';
@@ -29,33 +28,42 @@ export class AuthGuard implements CanActivate {
 
         const token = accesstoken.split('accesstoken_')[1];
 
-        // verify the token
-        const decode = this.jwtService.verify(token, {
-            secret: process.env.REGISTER_SECRET_KEY,
-        });
+        try {
+            // verify the token
+            const decode = this.jwtService.verify(token, {
+                secret: process.env.REGISTER_SECRET_KEY,
+            });
 
-        // check if the token is not valid
-        if (!decode) throw new HttpException('!not valid token', 400);
-
-        // check if found user
-        const user = await this.userModel.findOne({ _id: decode.id });
-        if (!user) throw new HttpException('!not found user', 400);
-
-        // check if user is deleted
-        if (user.isDeleted) throw new HttpException('!user is deleted', 400);
-
-        // // authorization
-        // if (!accessRoles.includes(user.role)) return next(new appError('unauthorized', 401));
-
-        // if change password    
-        if (user?.changePasswordTime) {
-            let time = user?.changePasswordTime.getTime() / 1000
-            let timeParse = parseInt(JSON.stringify(time))
-            if (timeParse > decode.iat) throw new HttpException('!change password', 400);
+            if (!decode) throw new HttpException('!not valid token', 400);
+            if (decode.length > 0) throw new HttpException('!token not found', 400);
+    
+            // check if found user
+            const user = await this.userModel.findOne({ _id: decode.id });
+            if (!user) throw new HttpException('!not found user', 400);
+    
+            // check if user is deleted
+            if (user.isDeleted) throw new HttpException('!user is deleted', 400);
+    
+            // // authorization
+            // if (!accessRoles.includes(user.role)) return next(new appError('unauthorized', 401));
+    
+            // if change password    
+            if (user?.changePasswordTime) {
+                let time = user?.changePasswordTime.getTime() / 1000
+                let timeParse = parseInt(JSON.stringify(time))
+                if (timeParse > decode.iat) throw new HttpException('!change password', 400);
+            }
+    
+            req.authUser = user
+    
+            return req;
+             
+        } catch (error) {
+            throw new HttpException('!not valid token', 400);
         }
 
-        req.authUser = user
 
-        return req;
+
+      
     }
 }

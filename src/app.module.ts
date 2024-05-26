@@ -10,6 +10,8 @@ import { ConfigModule } from '@nestjs/config';
 // import { APP_FILTER } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './Modules/Auth/guards/roles.guards';
 
 
 
@@ -35,6 +37,10 @@ import { Module } from '@nestjs/common';
     //   provide: APP_FILTER,
     //   useClass: HttpExceptionFilter,
     // },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+  },
     AuthService,
     JwtService,
     SendEmailService

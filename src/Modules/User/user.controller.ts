@@ -13,6 +13,8 @@ import { GetUserByIdDto } from "./dto/get-user-by-id.dto";
 import { UpdateUserPasswordDto } from "./dto/update-user-password.dto";
 import { UpdateUserEmailDto } from "./dto/update-user-email.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
+import { Roles } from "src/common/Decorators/roles.decorator";
+import { Role } from "src/common/Utils/enums/role.enum";
 
 
 @Controller('User')
@@ -58,6 +60,7 @@ export class UserController {
 
     //========================= Update User Email Controller =========================//
     @Patch('Update/Email')
+    @Roles(Role.user)
     async updateUserEmailController(
         @Res() res: Response,
         @Req() req: Request,

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose from "mongoose";
+import { Role } from "src/common/Utils/enums/role.enum";
 
 
 @Schema()
@@ -54,8 +55,8 @@ export class User {
     loggedUser: boolean;
 
     @Prop({
-        enum: ['user', 'teacher', 'admin'],
-        default: 'user'
+        enum: [Role.admin, Role.user, Role.teacher],
+        default: Role.user
     })
     role: string;
 
